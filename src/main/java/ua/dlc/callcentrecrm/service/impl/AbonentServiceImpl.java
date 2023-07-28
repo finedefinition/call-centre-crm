@@ -1,23 +1,45 @@
 package ua.dlc.callcentrecrm.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ua.dlc.callcentrecrm.dao.AbonentDao;
 import ua.dlc.callcentrecrm.model.Abonent;
-import ua.dlc.callcentrecrm.repository.AbonentRepository;
 import ua.dlc.callcentrecrm.service.AbonentService;
 
 @Service
 public class AbonentServiceImpl implements AbonentService {
 
-    @Autowired
-    private final AbonentRepository abonentRepository;
+    private final AbonentDao abonentDao;
 
-    public AbonentServiceImpl(AbonentRepository abonentRepository) {
-        this.abonentRepository = abonentRepository;
+    public AbonentServiceImpl(AbonentDao abonentDao) {
+        this.abonentDao = abonentDao;
+    }
+
+    @Transactional
+    @Override
+    public Abonent save(Abonent abonent) {
+        return abonentDao.save(abonent);
     }
 
     @Override
-    public void save(Abonent abonent) {
-        abonentRepository.save(abonent);
+    public Abonent findById(Long id) {
+        return abonentDao.findById(id);
+    }
+
+    @Override
+    public List<Abonent> findAll() {
+        return abonentDao.findAll();
+    }
+
+    @Override
+    public List<Abonent> findByLastName(String theLastName) {
+        return abonentDao.findByLastName(theLastName);
+    }
+
+    @Transactional
+    @Override
+    public void deleteById(Long theId) {
+        abonentDao.deleteById(theId);
     }
 }

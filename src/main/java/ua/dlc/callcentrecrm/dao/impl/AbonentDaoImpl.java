@@ -2,28 +2,28 @@ package ua.dlc.callcentrecrm.dao.impl;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import ua.dlc.callcentrecrm.dao.AbonentDAO;
+import ua.dlc.callcentrecrm.dao.AbonentDao;
 import ua.dlc.callcentrecrm.model.Abonent;
 
-import java.util.List;
-
 @Repository
-public class AbonentDAOImpl implements AbonentDAO {
+public class AbonentDaoImpl implements AbonentDao {
 
     private EntityManager entityManager;
 
     @Autowired
-    public AbonentDAOImpl(EntityManager entityManager) {
+    public AbonentDaoImpl(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 
     @Transactional
     @Override
-    public void save(Abonent abonent) {
-        entityManager.persist(abonent);
+    public Abonent save(Abonent abonent) {
+        Abonent abonent1 = entityManager.merge(abonent);
+        return abonent1;
     }
 
     @Override
@@ -34,7 +34,7 @@ public class AbonentDAOImpl implements AbonentDAO {
     @Override
     public List<Abonent> findAll() {
         // create query
-        TypedQuery<Abonent> theQuery = entityManager.createQuery("FROM Abonent order by firstName DESC", Abonent.class);
+        TypedQuery<Abonent> theQuery = entityManager.createQuery("FROM Abonent", Abonent.class);
 
         // return query results
         return theQuery.getResultList();
@@ -53,6 +53,11 @@ public class AbonentDAOImpl implements AbonentDAO {
         return theQuery.getResultList();
     }
 
-
-
+    @Override
+    public void deleteById(Long theId) {
+        // find Abonents by id
+        Abonent abonent = entityManager.find(Abonent.class, theId);
+        // remove employee
+        entityManager.remove(abonent);
+    }
 }
