@@ -1,3 +1,7 @@
 databaseChangeLog:
   - include:
       file: /db/changelog/changes/create-abonent-table.sql
+  - include:
+      file: /db/changelog/changes/create-column-email.sql
+  - include:
+      file: /db/changelog/changes/create-column-phone-number.sql

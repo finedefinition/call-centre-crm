@@ -10,7 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "abonent")
+@Table(name = "impotent")
 @Data
 @NoArgsConstructor
 public class Abonent {
@@ -19,13 +19,13 @@ public class Abonent {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "first_name", columnDefinition = "VARCHAR(50)")
+    @Column(name = "first_name")
     private String firstName;
 
-    @Column(name = "middle_name", columnDefinition = "VARCHAR(50)")
+    @Column(name = "middle_name")
     private String middleName;
 
-    @Column(name = "last_name", columnDefinition = "VARCHAR(50)")
+    @Column(name = "last_name")
     private String lastName;
 
     public Abonent(String firstName, String middleName, String lastName) {
