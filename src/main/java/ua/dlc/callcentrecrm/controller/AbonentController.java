@@ -1,18 +1,18 @@
 package ua.dlc.callcentrecrm.controller;
 
+import java.util.Comparator;
 import java.util.List;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
 import ua.dlc.callcentrecrm.model.Abonent;
 import ua.dlc.callcentrecrm.service.AbonentService;
 
-@RestController
+@Controller
 @RequestMapping("/api")
 public class AbonentController {
     private AbonentService abonentService;
@@ -21,63 +21,72 @@ public class AbonentController {
         this.abonentService = abonentService;
     }
 
-    // expose "/abonents" and return a list of abonents
-    @GetMapping("/abonents")
-    public List<Abonent> findAll() {
-        return abonentService.findAll();
+    @GetMapping("/list")
+    public String listAbonents(Model theModel) {
+
+        // get the Abonents from the database
+        List<Abonent> theAbonents = abonentService.findAll();
+
+        // Create a custom comparator to sort in descending order based on 'id'
+        Comparator<Abonent> descComparator = new Comparator<Abonent>() {
+            @Override
+            public int compare(Abonent ab1, Abonent ab2) {
+                return Long.compare(ab2.getId(), ab1.getId());
+            }
+        };
+
+        // Sort the list using the custom comparator (in descending order based on 'id')
+        theAbonents.sort(descComparator);
+
+        // Add the sorted list to the spring model
+        theModel.addAttribute("abonents", theAbonents);
+
+        return "list-abonents";
     }
 
-    // add mapping for GET /abonents/{abonentId}
+    @GetMapping("/showFormForAdd")
+    public String showFormForAdd(Model theModel) {
 
-    @GetMapping("/abonents/{abonentId}")
-    public Abonent getAbonent(@PathVariable Long abonentId) {
+        // create model attribute to bind form data
+        Abonent abonent = new Abonent();
 
-        Abonent abonent = abonentService.findById(abonentId);
+        theModel.addAttribute("abonent", abonent);
 
-        if (abonent == null) {
-            throw new RuntimeException("Abonent id not found - " + abonentId);
-        }
-
-        return abonent;
+        return "abonent-form";
     }
 
-    // add mapping for POST /employees - add new employee
+    @PostMapping("/showFormForUpdate")
+    public String showFormForUpdate(@RequestParam("abonentId") Long theId,
+                                    Model theModel) {
 
-    @PostMapping("/abonents")
-    public Abonent addAbonent(@RequestBody Abonent abonent) {
+        // get the abonent from the service
+        Abonent abonent = abonentService.findById(theId);
 
-        // also just in case they pass an id in JSON ... set id to 0
-        // this is to force a save of new item ... instead of update
-        abonent.setId(null);
+        // set abonent as a model attribute to pre-populate the form
+        theModel.addAttribute("abonent", abonent);
 
-        Abonent dbAbonent = abonentService.save(abonent);
-
-        return dbAbonent;
+        // send over to our form
+        return "abonent-form";
     }
 
-    @PutMapping("/abonents")
-    public Abonent updateAbonent(@RequestBody Abonent abonent) {
+    @PostMapping("/save")
+    public String saveAbonent(@ModelAttribute("abonent") Abonent abonent) {
 
-        Abonent dbAbonent = abonentService.save(abonent);
+        // save the abonent
+        abonentService.save(abonent);
 
-        return dbAbonent;
+        // use a redirect to prevent duplicate submissions
+        return "redirect:/api/list";
     }
 
-    // add mapping for DELETE /employees/{employeeId} - delete employee
+    @PostMapping("/delete")
+    public String delete(@RequestParam("abonentId") Long theId) {
 
-    @DeleteMapping("/abonents/{abonentId}")
-    public String deleteAbonent(@PathVariable Long abonentId) {
-        Abonent abonent = abonentService.findById(abonentId);
+        // delete the abonent
+        abonentService.deleteById(theId);
 
-        // throw exception if null
+        // redirect to /api/list
+        return "redirect:/api/list";
 
-        if (abonent == null) {
-            throw new RuntimeException("Employee id not found - " + abonentId);
-        }
-
-        abonentService.deleteById(abonentId);
-
-        return "Deleted abonent id - " + abonentId;
     }
 }
-

@@ -34,11 +34,10 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(configurer ->
                 configurer
-                        .requestMatchers(HttpMethod.GET, "/api/abonents").hasRole("EMPLOYEE")
-                        .requestMatchers(HttpMethod.GET, "/api/abonents/**").hasRole("EMPLOYEE")
-                        .requestMatchers(HttpMethod.POST, "/api/abonents").hasRole("MANAGER")
-                        .requestMatchers(HttpMethod.PUT, "/api/abonents").hasRole("MANAGER")
-                        .requestMatchers(HttpMethod.DELETE, "/api/abonents/**").hasRole("ADMIN"));
+                        .requestMatchers(HttpMethod.GET, "/**").hasRole("EMPLOYEE")
+                        .requestMatchers(HttpMethod.POST, "/**").hasRole("EMPLOYEE")
+                        .requestMatchers(HttpMethod.PUT, "/**").hasRole("EMPLOYEE")
+                        .requestMatchers(HttpMethod.DELETE, "/**").hasRole("EMPLOYEE"));
 
         // use HTTP Basic authentication
         http.httpBasic(Customizer.withDefaults());

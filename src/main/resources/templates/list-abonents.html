@@ -1,0 +1,89 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+
+	<title>Abonent Directory</title>
+</head>
+
+<body>
+
+<div class="container">
+
+	<h3>Abonent Directory</h3>
+	<hr>
+
+	<!-- Add a button -->
+	<a th:href="@{/api/showFormForAdd}"
+		class="btn btn-primary btn-sm mb-3">
+		Add Abonent
+	</a>
+
+	<table class="table table-bordered table-striped">
+		<thead class="table-dark">
+			<tr>
+				<th>Id</th>
+				<th>First Name</th>
+				<th>Middle Name</th>
+				<th>Last Name</th>
+				<th>Gender</th>
+				<th>Email</th>
+				<th>Phone Number</th>
+				<th>Action</th>
+			</tr>
+		</thead>
+		
+		<tbody>
+			<tr th:each="tempAbonent : ${abonents}">
+
+				<td th:text="${tempAbonent.id}" />
+				<td th:text="${tempAbonent.firstName}" />
+				<td th:text="${tempAbonent.middleName}" />
+				<td th:text="${tempAbonent.lastName}" />
+				<td th:text="${tempAbonent.gender}" />
+				<td th:text="${tempAbonent.email}" />
+				<td th:text="${tempAbonent.phoneNumber}" />
+				<td>
+					<div class="row">
+
+						<div class="col-small">
+							<!-- Add "update" button/link -->
+							<form action="#" th:action="@{/api/showFormForUpdate}" method="POST">
+
+								<input type="hidden" name="abonentId" th:value="${tempAbonent.id}" />
+								<button type="submit" class="btn btn-info btn-sm me-1" style="float:left;">Update</button>
+
+							</form>
+
+							<!-- Add "delete" button/link -->
+							<form action="#" th:action="@{/api/delete}" method="POST">
+
+								<input type="hidden" name="abonentId" th:value="${tempAbonent.id}" />
+								<button type="submit" class="btn btn-danger btn-sm"
+										onclick="if (!(confirm('Are you sure you want to delete this Abonent?'))) return false">
+									Delete
+								</button>
+
+							</form>
+						</div>
+
+					</div>
+				</td>
+
+			</tr>
+		</tbody>		
+	</table>
+	
+</div>
+	
+</body>
+</html>
+
+
+
