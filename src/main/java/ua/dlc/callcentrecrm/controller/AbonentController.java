@@ -21,26 +21,10 @@ public class AbonentController {
         this.abonentService = abonentService;
     }
 
-    // add a request mapping for /leaders
-
-    @GetMapping("/leaders")
-    public String showLeaders() {
-
-        return "leaders";
-    }
-
-    // add request mapping for /systems
-
-    @GetMapping("/systems")
-    public String showSystems() {
-
-        return "systems";
-    }
-
-    @GetMapping("/list")
-    public String listAbonents(Model theModel) {
-
-        // get the Abonents from the database
+    @GetMapping("/mainpage/main-list")
+    public String showFormForAdd(Model theModel) {
+        Abonent abonent = new Abonent();
+        theModel.addAttribute("abonent", abonent);
         List<Abonent> theAbonents = abonentService.findAll();
 
         // Create a custom comparator to sort in descending order based on 'id'
@@ -57,21 +41,10 @@ public class AbonentController {
         // Add the sorted list to the spring model
         theModel.addAttribute("abonents", theAbonents);
 
-        return "list-abonents";
+        return "mainpage/main-list";
     }
 
-    @GetMapping("/showFormForAdd")
-    public String showFormForAdd(Model theModel) {
-
-        // create model attribute to bind form data
-        Abonent abonent = new Abonent();
-
-        theModel.addAttribute("abonent", abonent);
-
-        return "abonent-form";
-    }
-
-    @PostMapping("/showFormForUpdate")
+    @PostMapping("/update")
     public String showFormForUpdate(@RequestParam("abonentId") Long theId,
                                     Model theModel) {
 
@@ -82,7 +55,7 @@ public class AbonentController {
         theModel.addAttribute("abonent", abonent);
 
         // send over to our form
-        return "abonent-form";
+        return "mainpage/main-list";
     }
 
     @PostMapping("/save")
@@ -92,7 +65,7 @@ public class AbonentController {
         abonentService.save(abonent);
 
         // use a redirect to prevent duplicate submissions
-        return "redirect:/api/list";
+        return "redirect:/api/mainpage/main-list";
     }
 
     @PostMapping("/delete")
@@ -101,8 +74,7 @@ public class AbonentController {
         // delete the abonent
         abonentService.deleteById(theId);
 
-        // redirect to /api/list
-        return "redirect:/api/list";
+        return "redirect:/api/mainpage/main-list";
 
     }
 }
