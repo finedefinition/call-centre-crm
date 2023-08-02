@@ -6,6 +6,8 @@ import ua.dlc.callcentrecrm.model.Abonent;
 public interface AbonentService {
     Abonent save(Abonent abonent);
 
+    Abonent update(Abonent abonent);
+
     Abonent findById(Long theId);
 
     List<Abonent> findAll();

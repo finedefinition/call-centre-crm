@@ -15,6 +15,7 @@ import ua.dlc.callcentrecrm.service.AbonentService;
 @Controller
 @RequestMapping("/api")
 public class AbonentController {
+
     private AbonentService abonentService;
 
     public AbonentController(AbonentService abonentService) {
@@ -23,6 +24,7 @@ public class AbonentController {
 
     @GetMapping("/mainpage/main-list")
     public String showFormForAdd(Model theModel) {
+
         Abonent abonent = new Abonent();
         theModel.addAttribute("abonent", abonent);
         List<Abonent> theAbonents = abonentService.findAll();
@@ -44,37 +46,23 @@ public class AbonentController {
         return "mainpage/main-list";
     }
 
-    @PostMapping("/update")
+    @PostMapping("/getById")
     public String showFormForUpdate(@RequestParam("abonentId") Long theId,
                                     Model theModel) {
-
-        // get the abonent from the service
         Abonent abonent = abonentService.findById(theId);
-
-        // set abonent as a model attribute to pre-populate the form
         theModel.addAttribute("abonent", abonent);
-
-        // send over to our form
         return "mainpage/main-list";
     }
 
     @PostMapping("/save")
     public String saveAbonent(@ModelAttribute("abonent") Abonent abonent) {
-
-        // save the abonent
         abonentService.save(abonent);
-
-        // use a redirect to prevent duplicate submissions
         return "redirect:/api/mainpage/main-list";
     }
 
     @PostMapping("/delete")
     public String delete(@RequestParam("abonentId") Long theId) {
-
-        // delete the abonent
         abonentService.deleteById(theId);
-
         return "redirect:/api/mainpage/main-list";
-
     }
 }
