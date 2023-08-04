@@ -40,13 +40,17 @@ public class Abonent {
 
     private String phoneNumber;
 
+    @Column(name = "user")
+
+    private String user;
+
     public Abonent() {
     }
 
     public Abonent(String firstName, String middleName,
-                   String lastName, String gender, String email,
-                   LocalDateTime createdAt, LocalDateTime updatedAt,
-                   String phoneNumber) {
+                   String lastName, String gender,
+                   String email, LocalDateTime createdAt,
+                   LocalDateTime updatedAt, String phoneNumber, String user) {
         this.firstName = firstName;
         this.middleName = middleName;
         this.lastName = lastName;
@@ -55,6 +59,7 @@ public class Abonent {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.phoneNumber = phoneNumber;
+        this.user = user;
     }
 
     public Long getId() {
@@ -127,5 +132,13 @@ public class Abonent {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
     }
 }

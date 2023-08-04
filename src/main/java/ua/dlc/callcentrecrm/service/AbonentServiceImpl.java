@@ -4,6 +4,8 @@ import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ua.dlc.callcentrecrm.model.Abonent;
 import ua.dlc.callcentrecrm.repository.AbonentRepository;
@@ -22,9 +24,14 @@ public class AbonentServiceImpl implements AbonentService {
 
         if (abonent.getCreatedAt() == null) {
             abonent.setCreatedAt(LocalDateTime.now(Clock.systemUTC()));
+            abonent.setUpdatedAt(LocalDateTime.of(0, 1, 1, 0, 0));
         } else {
             abonent.setUpdatedAt(LocalDateTime.now(Clock.systemUTC()));
         }
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        abonent.setUser(authentication.getName());
+
         return abonentRepository.save(abonent);
     }
 
