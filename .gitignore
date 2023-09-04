@@ -42,5 +42,5 @@ build/
 .env
 
 ### Liquibase ###
-liquibase.properties
+src/main/resources/liquibase.properties
 

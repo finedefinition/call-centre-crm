@@ -23,5 +23,4 @@
                      path="01-drop-abonents-table.sql"/>
         </rollback>
     </changeSet>
-
 </databaseChangeLog>

@@ -1,2 +1,2 @@
 drop table users
-    GO
+GO

@@ -1,2 +1,2 @@
-drop table audits
-    GO
+DROP TABLE `audits`
+GO
